@@ -83,6 +83,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onSuccess(Object o) {
                 Toast.makeText(MainActivity.this, "Bird added successfully!", Toast.LENGTH_SHORT).show();
+
+                editTextBirdName.setText("Bird Name");
+                editTextZipCode.setText("Zip Code");
+                editTextPersonName.setText("Your Name");
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
