@@ -22,6 +22,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 public class SearchActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -79,6 +80,25 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
 
         int searchZipCode = Integer.parseInt(editTextSearch.getText().toString());
 
+        Query searchQuery = myRef.orderByChild("zipcode").equalTo(searchZipCode);
+
+        searchQuery.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()) {
+                    Toast.makeText(SearchActivity.this, "Bird record found!", Toast.LENGTH_SHORT).show();
+
+                }  else {
+                    Toast.makeText(SearchActivity.this, "No bird records exist in this zip code.", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         myRef.orderByChild("zipcode").equalTo(searchZipCode).addChildEventListener(new ChildEventListener() {
             @Override
@@ -90,6 +110,8 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
 
                 textViewBirdResult.setText(foundBirdName);
                 textViewPersonResult.setText(foundPersonName);
+
+                editTextSearch.setText("Search Birds");
 
             }
 
