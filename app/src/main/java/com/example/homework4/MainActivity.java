@@ -13,6 +13,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -74,6 +77,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Bird myBird = new Bird(birdName, zipCode, personName);
 
-        myRef.push().setValue(myBird);
+        Task databaseTask = myRef.push().setValue(myBird);
+
+        databaseTask.addOnSuccessListener(new OnSuccessListener() {
+            @Override
+            public void onSuccess(Object o) {
+                Toast.makeText(MainActivity.this, "Bird added successfully!", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(MainActivity.this, "Error adding bird to database.", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 }
